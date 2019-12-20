@@ -18,15 +18,15 @@ public interface NewsItemDao {
     void insertNewsItem(NewsItem newsItem);
 
     @Delete
-    void deleteNote(NewsItem newsItem);
+    void deleteNewsItem(NewsItem newsItem);
 
     @Update
-    void updateNote(NewsItem newsItem);
+    void updateNewsItem(NewsItem newsItem);
 
     @Query("SELECT * FROM newsItems")
     List<NewsItem> getNewsItems();
 
     @Query("SELECT * FROM newsItems WHERE id = :newsItemId")
-    NewsItem getNewsItemsById(int newsItemId);
+    NewsItem getNewsItemById(int newsItemId);
 
 }

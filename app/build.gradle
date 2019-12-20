@@ -37,4 +37,6 @@ dependencies {
         transitive = true
     }
     implementation 'com.prof.rssparser:rssparser:2.0.4'
+    implementation 'org.jsoup:jsoup:1.12.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 }

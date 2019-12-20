@@ -17,7 +17,7 @@ public abstract class MainActionModeCallback implements ActionMode.Callback {
         actionMode.getMenuInflater().inflate(R.menu.main_action_mode, menu);
         this.action = actionMode;
         this.countItem = menu.findItem(R.id.action_checked_count);
-        this.shareItem = menu.findItem(R.id.action_share_note);
+        this.shareItem = menu.findItem(R.id.action_share_news_item);
         return true;
     }
 

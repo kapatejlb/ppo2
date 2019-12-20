@@ -65,7 +65,7 @@ public class NewsItem {
                 '}';
     }
 
-    public String getNewItemTitle() {
+    public String getNewsItemTitle() {
         return newsItemTitle;
     }
 
@@ -98,7 +98,7 @@ public class NewsItem {
     }
 
     public String getNewsItemImage() {
-        return newsItemGuid;
+        return newsItemImage;
     }
 
     public void setNewsItemImage(String newsItemImage) {
@@ -111,5 +111,13 @@ public class NewsItem {
 
     public void setNewsItemContent(String newsItemContent) {
         this.newsItemContent = newsItemContent;
+    }
+
+    public String getNewsItemGuid() {
+        return newsItemGuid;
+    }
+
+    public void setNewsGuid(String newsItemGuid) {
+        this.newsItemGuid = newsItemGuid;
     }
 }

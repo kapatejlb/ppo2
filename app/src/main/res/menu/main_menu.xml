@@ -9,28 +9,4 @@
         app:showAsAction="always"
         app:actionViewClass="android.widget.SearchView"
         android:title="Search"/>
-
-    <item
-        android:id="@+id/sort_date_in"
-        android:menuCategory="container"
-        android:title="sort by date(in)"
-        android:orderInCategory="1" />
-
-    <item
-        android:id="@+id/sort_date_dec"
-        android:menuCategory="container"
-        android:title="sort by date(dec)"
-        android:orderInCategory="1" />
-
-    <item
-        android:id="@+id/sort_title_in"
-        android:menuCategory="container"
-        android:title="sort by title(in)"
-        android:orderInCategory="1" />
-
-    <item
-        android:id="@+id/sort_title_dec"
-        android:menuCategory="container"
-        android:title="sort by title(dec)"
-        android:orderInCategory="1" />
 </menu>
