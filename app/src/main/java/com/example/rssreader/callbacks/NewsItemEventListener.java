@@ -6,6 +6,4 @@ public interface NewsItemEventListener {
 
     void onNewsItemClick(NewsItem newsItem);
 
-    void onNewsItemLongClick(NewsItem newsItem);
-
 }

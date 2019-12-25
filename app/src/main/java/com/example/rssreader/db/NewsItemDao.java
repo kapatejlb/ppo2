@@ -20,9 +20,6 @@ public interface NewsItemDao {
     @Delete
     void deleteNewsItem(NewsItem newsItem);
 
-    @Update
-    void updateNewsItem(NewsItem newsItem);
-
     @Query("SELECT * FROM newsItems")
     List<NewsItem> getNewsItems();
 

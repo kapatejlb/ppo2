@@ -3,7 +3,6 @@ package com.example.rssreader.model;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "newsItems")
@@ -25,9 +24,6 @@ public class NewsItem {
     @ColumnInfo(name = "content")
     private String newsItemContent;
 
-    @Ignore
-    private boolean checked = false;
-
     public NewsItem(String newsItemTitle, String newsItemAuthor, String newsItemDescription,
                     String newsItemPubDate, String newsItemImage, String newsItemGuid,
                     String newsItemContent) {
@@ -46,14 +42,6 @@ public class NewsItem {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
-    public boolean isChecked() {
-        return checked;
     }
 
     @NonNull

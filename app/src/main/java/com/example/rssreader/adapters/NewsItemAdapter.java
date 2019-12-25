@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.rssreader.R;
 import com.example.rssreader.callbacks.NewsItemEventListener;
@@ -18,19 +17,16 @@ import com.example.rssreader.model.NewsItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NoteHolder> {
 
     private Context context;
     private ArrayList<NewsItem> newsItems;
     private NewsItemEventListener listener;
-    private boolean multiCheckMode = false;
 
     public NewsItemAdapter(Context context, ArrayList<NewsItem> newsItems) {
         this.context = context;
         this.newsItems = newsItems;
-
     }
 
     @NonNull
@@ -49,7 +45,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NoteHo
             holder.newItemAuthor.setText("by " + newsItem.getNewsItemAuthor());
             Picasso.with(context)
                     .load(newsItem.getNewsItemImage())
-                    .placeholder(R.drawable.no_image)
+                    .placeholder(R.drawable.image_coming)
                     .error(R.drawable.no_image)
                     .into(holder.newsItemPreviewImage);
             holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -58,21 +54,6 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NoteHo
                     listener.onNewsItemClick(newsItem);
                 }
             });
-
-            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    listener.onNewsItemLongClick(newsItem);
-                    return false;
-                }
-            });
-
-            if (multiCheckMode) {
-                holder.checkBox.setVisibility(View.VISIBLE);
-                holder.checkBox.setChecked(newsItem.isChecked());
-            } else holder.checkBox.setVisibility(View.GONE);
-
-
         }
     }
 
@@ -83,16 +64,6 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NoteHo
 
     private NewsItem getNewsItem(int position) {
         return newsItems.get(position);
-    }
-
-    public List<NewsItem> getCheckedNewsItems() {
-        List<NewsItem> checkedNewsItems = new ArrayList<>();
-        for (NewsItem n : this.newsItems) {
-            if (n.isChecked())
-                checkedNewsItems.add(n);
-        }
-
-        return checkedNewsItems;
     }
 
     class NoteHolder extends RecyclerView.ViewHolder {
@@ -112,14 +83,5 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NoteHo
 
     public void setListener(NewsItemEventListener listener) {
         this.listener = listener;
-    }
-
-    public void setMultiCheckMode(boolean multiCheckMode) {
-        this.multiCheckMode = multiCheckMode;
-        if (!multiCheckMode)
-            for (NewsItem newsItem : this.newsItems) {
-                newsItem.setChecked(false);
-            }
-        notifyDataSetChanged();
     }
 }

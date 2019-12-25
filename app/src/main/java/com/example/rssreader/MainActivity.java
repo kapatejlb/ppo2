@@ -9,11 +9,10 @@ import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.view.ActionMode;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.MutableLiveData;
@@ -24,13 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.rssreader.adapters.NewsItemAdapter;
-import com.example.rssreader.callbacks.MainActionModeCallback;
 import com.example.rssreader.callbacks.NewsItemEventListener;
 import com.example.rssreader.db.NewsItemDao;
 import com.example.rssreader.db.NewsItemsDB;
 import com.example.rssreader.model.NewsItem;
 import com.example.rssreader.utils.RssUtils;
-import com.google.android.material.snackbar.Snackbar;
 import com.prof.rssparser.Article;
 import com.prof.rssparser.OnTaskCompleted;
 import com.prof.rssparser.Parser;
@@ -45,11 +42,7 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
 
     private ArrayList<NewsItem> newsItems;
     private RecyclerView recyclerView;
-    private NewsItemAdapter adapter;
     private NewsItemDao dao;
-    private int chackedCount = 0;
-    private MainActionModeCallback actionModeCallback;
-    private int theme;
     private String savedLink = "";
     private MutableLiveData<List<Article>> articleListLive = new MutableLiveData<>();
     private SwipeRefreshLayout refreshLayout;
@@ -57,24 +50,13 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        switch (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) {
-            case Configuration.UI_MODE_NIGHT_YES:
-                theme = R.style.AppTheme_Dark;
-                break;
-            case Configuration.UI_MODE_NIGHT_NO:
-                theme = R.style.AppTheme;
-                break;
-        }
-
-        setTheme(theme);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
 
         Toolbar toolbar = findViewById(R.id.main_activity_toolbar);
         setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setTitle("");
+        Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
         recyclerView = findViewById(R.id.news_items_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -126,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
                 @Override
                 public void onError(Exception e) {
                     refreshLayout.setRefreshing(false);
-                    Snackbar.make(findViewById(R.id.layout_root), getString(R.string.link_trouble),
-                            Snackbar.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.link_trouble),
+                            Toast.LENGTH_LONG).show();
                 }
             });
             parser.execute(rssLink);
@@ -138,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
         this.newsItems = new ArrayList<>();
         List<NewsItem> list = dao.getNewsItems();
         this.newsItems.addAll(list);
-        this.adapter = new NewsItemAdapter(this, newsItems);
-        this.adapter.setListener(this);
+        NewsItemAdapter adapter = new NewsItemAdapter(this, newsItems);
+        adapter.setListener(this);
         recyclerView.setAdapter(adapter);
         showEmptyView();
     }
@@ -166,81 +148,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
         Intent show = new Intent(this, ShowNewsItemActivity.class);
         show.putExtra(NOTE_EXTRA_Key, newsItem.getId());
         startActivity(show);
-
     }
 
-    @Override
-    public void onNewsItemLongClick(NewsItem newsItem) {
-        newsItem.setChecked(true);
-        chackedCount = 1;
-        adapter.setMultiCheckMode(true);
-
-        adapter.setListener(new NewsItemEventListener() {
-            @Override
-            public void onNewsItemClick(NewsItem newsItem) {
-                newsItem.setChecked(!newsItem.isChecked());
-                if (newsItem.isChecked())
-                    chackedCount++;
-                else chackedCount--;
-
-                if (chackedCount > 1) {
-                    actionModeCallback.changeShareItemVisible(false);
-                } else actionModeCallback.changeShareItemVisible(true);
-
-                if (chackedCount == 0) {
-                    actionModeCallback.getAction().finish();
-                }
-
-                actionModeCallback.setCount(chackedCount + "/" + newsItems.size());
-                adapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onNewsItemLongClick(NewsItem newsItem) {
-
-            }
-
-        });
-
-        actionModeCallback = new MainActionModeCallback() {
-            @Override
-            public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.action_share_news_item)
-                    onShareNewsItem();
-
-                actionMode.finish();
-                return false;
-            }
-
-        };
-
-        startActionMode(actionModeCallback);
-
-        actionModeCallback.setCount(chackedCount + "/" + newsItems.size());
-    }
-
-    private void onShareNewsItem() {
-
-        NewsItem newsItem = adapter.getCheckedNewsItems().get(0);
-        Intent share = new Intent(Intent.ACTION_SEND);
-        share.setType("text/plain");
-        String newsItemText = newsItem.getNewsItemTitle() + "\n\nLink : " +
-                newsItem.getNewsItemGuid() + "\nCreate on : " +
-                newsItem.getNewsItemPubDate() + "\nBy :" +
-                getString(R.string.app_name);
-        share.putExtra(Intent.EXTRA_TEXT, newsItemText);
-        startActivity(share);
-
-    }
-
-
-    @Override
-    public void onActionModeFinished(ActionMode mode) {
-        super.onActionModeFinished(mode);
-
-        adapter.setMultiCheckMode(false);
-        adapter.setListener(this);
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -284,13 +193,13 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
 
         if(activeNetwork == null){
-            Snackbar.make(findViewById(R.id.layout_root), getString(R.string.net_disconnected),
-                    Snackbar.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.net_disconnected),
+                    Toast.LENGTH_LONG).show();
             return false;
         }
         if(activeNetwork.isConnected()) {
-            Snackbar.make(findViewById(R.id.layout_root), getString(R.string.net_connected),
-                    Snackbar.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.net_connected),
+                    Toast.LENGTH_LONG).show();
             return true;
         }
         return false;
