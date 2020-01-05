@@ -57,55 +57,27 @@ public class NewsItem {
         return newsItemTitle;
     }
 
-    public void setNewsItemTitle(String newsItemTitle) {
-        this.newsItemTitle = newsItemTitle;
-    }
-
     public String getNewsItemAuthor() {
         return newsItemAuthor;
-    }
-
-    public void setNewsItemAuthor(String newsItemAuthor) {
-        this.newsItemAuthor = newsItemAuthor;
     }
 
     public String getNewsItemDescription() {
         return newsItemDescription;
     }
 
-    public void setNewsItemDescription(String newsItemDescription) {
-        this.newsItemDescription = newsItemDescription;
-    }
-
     public String getNewsItemPubDate() {
         return newsItemPubDate;
-    }
-
-    public void setNewsItemPubDate(String newsItemPubDate) {
-        this.newsItemPubDate = newsItemPubDate;
     }
 
     public String getNewsItemImage() {
         return newsItemImage;
     }
 
-    public void setNewsItemImage(String newsItemImage) {
-        this.newsItemImage = newsItemImage;
-    }
-
     public String getNewsItemContent() {
         return newsItemImage;
     }
 
-    public void setNewsItemContent(String newsItemContent) {
-        this.newsItemContent = newsItemContent;
-    }
-
     public String getNewsItemGuid() {
         return newsItemGuid;
-    }
-
-    public void setNewsGuid(String newsItemGuid) {
-        this.newsItemGuid = newsItemGuid;
     }
 }

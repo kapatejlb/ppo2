@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemEventList
 
         recyclerView = findViewById(R.id.news_items_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+
         int orientation = getResources().getConfiguration().orientation;
         if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
             recyclerView.setLayoutManager(new GridLayoutManager(this,2));
